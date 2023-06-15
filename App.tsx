@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
@@ -29,10 +29,9 @@ import { ExpoWebGLRenderingContext } from "expo-gl";
 import { CameraType } from "expo-camera/build/Camera.types";
 
 import Button from "./components/Button";
-import CircleButton from './components/CircleButton'
+import CircleButton from "./components/CircleButton";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
-
 
 // adding styles for custom images
 const image_styles = StyleSheet.create({
@@ -209,13 +208,13 @@ export default function App() {
     };
 
     const onSaveImageAsync = async () => {
-      if (Platform.OS !== "web") {
+      
         try {
           const localUri = await captureRef(imageRef, {
             height: 440,
             quality: 1,
           });
-  
+
           await MediaLibrary.saveToLibraryAsync(localUri);
           if (localUri) {
             alert("Saved!");
@@ -223,22 +222,7 @@ export default function App() {
         } catch (e) {
           console.log(e);
         }
-      } else {
-        try {
-          const dataUrl = await domtoimage.toJpeg(imageRef.current, {
-            quality: 0.95,
-            width: 320,
-            height: 440,
-          });
-  
-          let link = document.createElement("a");
-          link.download = "sticker-smash-jpeg";
-          link.href = dataUrl;
-          link.click();
-        } catch (e) {
-          console.log(e);
-        }
-      }
+     
     };
 
     // this is core code.
@@ -656,33 +640,40 @@ export default function App() {
       // `cameraTextureHeight` prop in `TensorCamera` below.
       <>
         <GestureHandlerRootView style={styles.container}>
-          
-          <View
-            style={
-              isPortrait()
-                ? styles.containerPortrait
-                : styles.containerLandscape
-            }
-          >
-            <TensorCamera
-              ref={cameraRef}
-              style={styles.camera}
-              autorender={AUTO_RENDER}
-              type={cameraType}
-              // tensor related props
-              resizeWidth={getOutputTensorWidth()}
-              resizeHeight={getOutputTensorHeight()}
-              resizeDepth={3}
-              rotation={getTextureRotationAngleInDegrees()}
-              onReady={handleCameraStream}
-            />
-            {renderPose()}
-            {renderFps()}
-            {renderCameraTypeSwitcher()}
-          </View>
-          <View style={styles.footerContainer}>
+        <View ref={imageRef} collapsable={false}>
+            <View
+              style={
+                isPortrait()
+                  ? styles.containerPortrait
+                  : styles.containerLandscape
+              }
+            >
+                
+              <TensorCamera
+                ref={cameraRef}
+                style={styles.camera}
+                autorender={AUTO_RENDER}
+                type={cameraType}
+                // tensor related props
+                resizeWidth={getOutputTensorWidth()}
+                resizeHeight={getOutputTensorHeight()}
+                resizeDepth={3}
+                rotation={getTextureRotationAngleInDegrees()}
+                onReady={handleCameraStream}
+              />
+              {renderPose()}
+              {renderFps()}
+              {renderCameraTypeSwitcher()}
+            </View>
+            
+            </View>
+            <View style={styles.footerContainer}>
+              <CircleButton
+                onPress={() => {
+                  alert("Circle Button has been pressed!");
+                }}
+              ></CircleButton>
 
-            <CircleButton onPress={() => {alert("Circle Button has been pressed!")}}></CircleButton>
           </View>
         </GestureHandlerRootView>
       </>
@@ -702,7 +693,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     position: "absolute",
-    bottom:80,
+    bottom: 80,
     flex: 1,
     alignItems: "center",
   },
