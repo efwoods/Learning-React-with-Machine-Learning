@@ -6,14 +6,13 @@ import {
   Dimensions,
   Platform,
   Image,
-  Button,
   Alert,
   Linking,
   SafeAreaView,
   Pressable,
 } from "react-native";
 
-import { TapGestureHandler } from "react-native-gesture-handler";
+// import { TapGestureHandler } from "react-native-gesture-handler";
 
 import { Camera } from "expo-camera";
 
@@ -27,6 +26,10 @@ import {
 import Svg, { Circle } from "react-native-svg";
 import { ExpoWebGLRenderingContext } from "expo-gl";
 import { CameraType } from "expo-camera/build/Camera.types";
+
+import Button from "./components/Button";
+import CircleButton from './components/CircleButton'
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // adding styles for custom images
 const image_styles = StyleSheet.create({
@@ -156,7 +159,8 @@ export default function App() {
     images: IterableIterator<tf.Tensor3D>,
     updatePreview: () => void,
     gl: ExpoWebGLRenderingContext
-  ) => { // this is where the function runs in a loop
+  ) => {
+    // this is where the function runs in a loop
     const loop = async () => {
       // Get the tensor and run pose detection.
       const imageTensor = images.next().value as tf.Tensor3D;
@@ -265,7 +269,7 @@ export default function App() {
             return (
               <>
                 <Circle
-                  key={`skeletonkp_${k.name}`}
+                  // key={`skeletonkp_${k.name}`}
                   cx={cx}
                   cy={cy}
                   r="4"
@@ -273,7 +277,6 @@ export default function App() {
                   fill="#00AA00"
                   stroke="white"
                 />
-                <View></View>
                 <View
                   style={{
                     width: 150,
@@ -283,12 +286,13 @@ export default function App() {
                     top: cy - 200,
                   }}
                 >
-                  {/* Button whith handler function named onPressLearnMore*/}
-                  <Pressable onPress={onPressLearnMore}>
-                    <Text>Evan Woods</Text>
-                  </Pressable>
+                  <Button
+                    label="Evan Woods"
+                    onPress={() => {
+                      alert("Evan Woods is my name");
+                    }}
+                  ></Button>
                 </View>
-
                 <Image
                   style={{
                     width: 50,
@@ -614,39 +618,63 @@ export default function App() {
       // Note that you don't need to specify `cameraTextureWidth` and
       // `cameraTextureHeight` prop in `TensorCamera` below.
       <>
-        <View
-          style={
-            isPortrait() ? styles.containerPortrait : styles.containerLandscape
-          }
-        >
-          <TensorCamera
-            ref={cameraRef}
-            style={styles.camera}
-            autorender={AUTO_RENDER}
-            type={cameraType}
-            // tensor related props
-            resizeWidth={getOutputTensorWidth()}
-            resizeHeight={getOutputTensorHeight()}
-            resizeDepth={3}
-            rotation={getTextureRotationAngleInDegrees()}
-            onReady={handleCameraStream}
-          />
-          {renderPose()}
-          {renderFps()}
-          {renderCameraTypeSwitcher()}
-        </View>
-        <View style={styles.footerContainer}>
-          <Text>This is here now.</Text>
-        </View>
+        <GestureHandlerRootView style={styles.container}>
+          <View
+            style={
+              isPortrait()
+                ? styles.containerPortrait
+                : styles.containerLandscape
+            }
+          >
+            <TensorCamera
+              ref={cameraRef}
+              style={styles.camera}
+              autorender={AUTO_RENDER}
+              type={cameraType}
+              // tensor related props
+              resizeWidth={getOutputTensorWidth()}
+              resizeHeight={getOutputTensorHeight()}
+              resizeDepth={3}
+              rotation={getTextureRotationAngleInDegrees()}
+              onReady={handleCameraStream}
+            />
+            {renderPose()}
+            {renderFps()}
+            {renderCameraTypeSwitcher()}
+          </View>
+          <View style={styles.footerContainer}>
+
+            <CircleButton onPress={() => {alert("Circle Button has been pressed!")}}></CircleButton>
+          </View>
+        </GestureHandlerRootView>
       </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#25292e",
+    alignItems: "center",
+  },
+  imageContainer: {
+    flex: 1,
+    paddingTop: 58,
+  },
   footerContainer: {
-    flex: 1/3,
-    alignItems: "center"
+    position: "absolute",
+    bottom:80,
+    flex: 1,
+    alignItems: "center",
+  },
+  optionsContainer: {
+    position: "absolute",
+    bottom: 80,
+  },
+  optionsRow: {
+    alignItems: "center",
+    flexDirection: "row",
   },
   containerPortrait: {
     position: "relative",
@@ -701,11 +729,3 @@ const styles = StyleSheet.create({
     zIndex: 20,
   },
 });
-
-function MissedGoal() {
-  return <h1>MISSED!</h1>;
-}
-
-function MadeGoal() {
-  return <h1>Goal!</h1>;
-}

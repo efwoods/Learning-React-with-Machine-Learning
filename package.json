@@ -20,6 +20,7 @@
     "expo-file-system": "^14.1.0",
     "expo-gl": "^11.4.0",
     "expo-gl-cpp": "^11.4.0",
+    "expo-media-library": "~14.2.0",
     "expo-screen-orientation": "~4.3.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -27,7 +28,8 @@
     "react-native-fs": "2.14.1",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-reanimated": "~2.9.1",
-    "react-native-svg": "12.3.0"
+    "react-native-svg": "12.3.0",
+    "react-native-view-shot": "3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
