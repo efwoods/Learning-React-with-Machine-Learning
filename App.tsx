@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from 'react';
+import { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -30,6 +31,8 @@ import { CameraType } from "expo-camera/build/Camera.types";
 import Button from "./components/Button";
 import CircleButton from './components/CircleButton'
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { captureRef } from "react-native-view-shot";
+
 
 // adding styles for custom images
 const image_styles = StyleSheet.create({
@@ -80,6 +83,7 @@ const AUTO_RENDER = false;
 const LOAD_MODEL_FROM_BUNDLE = false;
 
 export default function App() {
+  const imageRef = useRef();
   const cameraRef = useRef(null);
   const [tfReady, setTfReady] = useState(false);
   const [model, setModel] = useState<posedetection.PoseDetector>();
@@ -204,6 +208,39 @@ export default function App() {
       }
     };
 
+    const onSaveImageAsync = async () => {
+      if (Platform.OS !== "web") {
+        try {
+          const localUri = await captureRef(imageRef, {
+            height: 440,
+            quality: 1,
+          });
+  
+          await MediaLibrary.saveToLibraryAsync(localUri);
+          if (localUri) {
+            alert("Saved!");
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        try {
+          const dataUrl = await domtoimage.toJpeg(imageRef.current, {
+            quality: 0.95,
+            width: 320,
+            height: 440,
+          });
+  
+          let link = document.createElement("a");
+          link.download = "sticker-smash-jpeg";
+          link.href = dataUrl;
+          link.click();
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    };
+
     // this is core code.
     if (poses != null && poses.length > 0) {
       const keypoints = poses[0].keypoints
@@ -268,7 +305,7 @@ export default function App() {
           if (k.name == "nose") {
             return (
               <>
-                <Circle
+                {/* <Circle
                   // key={`skeletonkp_${k.name}`}
                   cx={cx}
                   cy={cy}
@@ -276,13 +313,13 @@ export default function App() {
                   strokeWidth="2"
                   fill="#00AA00"
                   stroke="white"
-                />
+                /> */}
                 <View
                   style={{
                     width: 150,
                     height: 50,
                     position: "absolute",
-                    left: cx,
+                    left: cx - 175,
                     top: cy - 200,
                   }}
                 >
@@ -312,167 +349,167 @@ export default function App() {
               </>
             );
           } else if (k.name == "left_eye") {
-            return (
-              <Circle
-                key={`skeletonkp_${k.name}`}
-                cx={cx}
-                cy={cy}
-                r="4"
-                strokeWidth="2"
-                fill="#00AA00"
-                stroke="white"
-              />
-            );
+            // return (
+            //   <Circle
+            //     key={`skeletonkp_${k.name}`}
+            //     cx={cx}
+            //     cy={cy}
+            //     r="4"
+            //     strokeWidth="2"
+            //     fill="#00AA00"
+            //     stroke="white"
+            //   />
+            // );
           } else if (k.name == "right_eye") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_ear") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_ear") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_shoulder") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_shoulder") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_elbow") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_elbow") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_wrist") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_wrist") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_hip") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_hip") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_knee") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_knee") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "left_ankle") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
           } else if (k.name == "right_ankle") {
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />;
+            // <Circle
+            //   key={`skeletonkp_${k.name}`}
+            //   cx={cx}
+            //   cy={cy}
+            //   r="4"
+            //   strokeWidth="2"
+            //   fill="#00AA00"
+            //   stroke="white"
+            // />;
             //   return(
             //   <>
             //   <Circle
@@ -511,17 +548,17 @@ export default function App() {
             //   )
           } else {
           }
-          return (
-            <Circle
-              key={`skeletonkp_${k.name}`}
-              cx={cx}
-              cy={cy}
-              r="4"
-              strokeWidth="2"
-              fill="#00AA00"
-              stroke="white"
-            />
-          );
+          // return (
+          //   <Circle
+          //     key={`skeletonkp_${k.name}`}
+          //     cx={cx}
+          //     cy={cy}
+          //     r="4"
+          //     strokeWidth="2"
+          //     fill="#00AA00"
+          //     stroke="white"
+          //   />
+          // );
         });
 
       return <Svg style={styles.svg}>{keypoints}</Svg>;
@@ -619,6 +656,7 @@ export default function App() {
       // `cameraTextureHeight` prop in `TensorCamera` below.
       <>
         <GestureHandlerRootView style={styles.container}>
+          
           <View
             style={
               isPortrait()
