@@ -28,6 +28,8 @@ If the app crashes on startup, see [here][readme] for more info.
 
 
 ## Development Goals:
+Note: Consider continuing development on tensorflow/tfjs image-recognition;
+
 - continuously runs to make a prediction on who is presented in the frame
   - an image is saved using the "StickerSmash" Save feature
   - The image is processed using step 10 from "github.com/efwoods/webcam-machine-learning/README.md"; if no one is detected, then the default is returned;
