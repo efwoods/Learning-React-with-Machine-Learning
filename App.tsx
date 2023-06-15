@@ -156,7 +156,7 @@ export default function App() {
     images: IterableIterator<tf.Tensor3D>,
     updatePreview: () => void,
     gl: ExpoWebGLRenderingContext
-  ) => {
+  ) => { // this is where the function runs in a loop
     const loop = async () => {
       // Get the tensor and run pose detection.
       const imageTensor = images.next().value as tf.Tensor3D;
@@ -635,12 +635,19 @@ export default function App() {
           {renderFps()}
           {renderCameraTypeSwitcher()}
         </View>
+        <View style={styles.footerContainer}>
+          <Text>This is here now.</Text>
+        </View>
       </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  footerContainer: {
+    flex: 1/3,
+    alignItems: "center"
+  },
   containerPortrait: {
     position: "relative",
     width: CAM_PREVIEW_WIDTH,
